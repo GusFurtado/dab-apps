@@ -1,10 +1,8 @@
-from DadosAbertosBrasil import favoritos
+import DadosAbertosBrasil as dab
 
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-
-import plotly.express as px
 
 import utils.ibge_utils as utils
 
@@ -13,7 +11,7 @@ import utils.ibge_utils as utils
 dd_uf = dbc.DropdownMenu([
     dbc.DropdownMenuItem([
         html.Span(
-            html.Img(src=favoritos.bandeira(uf, 20)),
+            html.Img(src=dab.bandeira(uf, 20)),
             className = 'mr-2'
         ),
         html.Span(utils.UFS[uf]['Nome'])

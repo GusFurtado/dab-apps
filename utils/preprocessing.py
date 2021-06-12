@@ -1,5 +1,5 @@
-from DadosAbertosBrasil import ibge
-import pandas as pd
+from DadosAbertosBrasil import ibge, camara
+from pandas import concat
 
 
 
@@ -65,25 +65,48 @@ KPIS = {
 
 
 
-series = []
-for kpi in KPIS:
-    print(f'Capturando dados de {kpi}')
-    df = ibge.sidra(
-        tabela = KPIS[kpi]['agregado'],
-        periodos = KPIS[kpi]['periodo'],
-        variaveis = KPIS[kpi]['variaveis'],
-        classificacoes = KPIS[kpi]['classificacoes'],
-        localidades = {6: 'all'}
-    )
-    df = df.loc[:,['Município (Código)', 'Município', 'Valor']]
-    df.Valor = df.Valor.replace('-', 0)
-    df.Valor = df.Valor.astype(float)
-    df.columns = ['Código', 'Município', kpi]
-    df.set_index(['Código', 'Município'], inplace=True)
-    series.append(df)
+def get_sidra_data():
+
+    series = []
+    for kpi in KPIS:
+        print(f'Capturando dados de {kpi}')
+        df = ibge.sidra(
+            tabela = KPIS[kpi]['agregado'],
+            periodos = KPIS[kpi]['periodo'],
+            variaveis = KPIS[kpi]['variaveis'],
+            classificacoes = KPIS[kpi]['classificacoes'],
+            localidades = {6: 'all'}
+        )
+        df = df.loc[:,['Município (Código)', 'Município', 'Valor']]
+        df.Valor = df.Valor.replace('-', 0)
+        df.Valor = df.Valor.astype(float)
+        df.columns = ['Código', 'Município', kpi]
+        df.set_index(['Código', 'Município'], inplace=True)
+        series.append(df)
+
+    df_concat = concat(series, axis=1)
+    df_concat.reset_index(inplace=True)
+    df_concat.to_parquet('data/Indicadores.parquet')
+
+    return
 
 
 
-df_concat = pd.concat(series, axis=1)
-df_concat.reset_index(inplace=True)
-df_concat.to_parquet('data/Indicadores.parquet')
+def get_partidos_json():
+    '''
+    Captura partidos e a URL para as logos e exporta em um arquivo JSON que
+    será consumido pela aplicação.
+
+    --------------------------------------------------------------------------
+    '''
+
+    def get_logo(cod:int) -> str:
+        p = camara.Partido(cod)
+        return p.logo
+
+    partidos = camara.lista_partidos(legislatura=56, itens=50)
+    partidos['logo'] = partidos.id.apply(get_logo)
+    partidos.drop(columns='uri', inplace=True)
+    partidos.to_json('data/camara_data.json')
+
+    return

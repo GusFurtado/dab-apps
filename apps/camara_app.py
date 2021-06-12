@@ -1,9 +1,7 @@
-from DadosAbertosBrasil import camara
+from DadosAbertosBrasil import camara, bandeira
 
 from datetime import datetime
 
-import dash
-import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output
 from dash_extensions.enrich import DashProxy
 
@@ -14,21 +12,8 @@ import utils.camara_utils as utils
 
 
 
-MONTSERRAT = {
-    'href': 'https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap',
-    'rel': 'stylesheet'
-}
-
-
-
-app = DashProxy(
-    name = __name__,
-    external_stylesheets = [dbc.themes.BOOTSTRAP, MONTSERRAT]
-)
-
+app = DashProxy(name=__name__)
 app.layout = layout.layout
-app.title = 'Painel de Deputados'
-server = app.server
 
 
 
@@ -85,18 +70,10 @@ def update_deputado(cod, ano):
         dep.gabinete['telefone'],
         nascimento,
         utils.UFS[dep.uf],
-        utils.bandeira(dep.uf, tamanho=50),
+        bandeira(dep.uf, tamanho=50),
         PARTIDOS.loc[partido, 'nome'],
         PARTIDOS.loc[partido, 'logo'],
         charts.plots(),
         None,
         {'display': 'none'}
-    )
-
-
-
-if __name__ == '__main__':
-    app.run_server(
-        host = '0.0.0.0',
-        port = 1000
     )

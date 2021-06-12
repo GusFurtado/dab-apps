@@ -1,10 +1,7 @@
 from DadosAbertosBrasil import ipea
 
-import pandas as pd
+from pandas import to_datetime
 import plotly.graph_objects as go
-import plotly.io as pio
-
-pio.templates.default = 'plotly_white'
 
 
 
@@ -17,7 +14,7 @@ class Serie:
         self.unidade = self.serie.unidade
         self.valores = self.serie.valores[['VALDATA','VALVALOR']]
         self.valores.columns = ['Ano', 'Valores']
-        self.valores.Ano = pd.to_datetime(self.valores.Ano, utc=True).dt.year
+        self.valores.Ano = to_datetime(self.valores.Ano, utc=True).dt.year
         self.valores.Ano = self.valores.Ano[self.valores.Ano >= 1994]
 
 

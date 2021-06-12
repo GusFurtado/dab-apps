@@ -1,10 +1,9 @@
-from DadosAbertosBrasil import favoritos
+import DadosAbertosBrasil as dab
 
 import os
 
 import dash
 from dash_extensions.enrich import DashProxy
-import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State, ALL
 import plotly.express as px
 
@@ -17,18 +16,13 @@ import utils.ibge_utils as utils
 
 TOKEN = os.environ.get('TOKEN')
 if TOKEN is None:
-    from data import mapbox_token
+    import mapbox_token
     TOKEN = mapbox_token.TOKEN
 
 
 
-app = DashProxy(
-    name = __name__,
-    external_stylesheets = [dbc.themes.SANDSTONE]
-)
-
+app = DashProxy(name=__name__)
 app.layout = layout.layout
-server = app.server
 
 
 
@@ -44,7 +38,9 @@ server = app.server
     prevent_initial_call = True)
 def update_data(uf, kpi, color, data):
     cc = dash.callback_context.triggered[0]['prop_id'].split('"')
-    data[cc[1]] = cc[3]
+    print(cc)
+    data[cc[1]] = cc[3][5:]
+    print(data)
     return (
         data['uf'],
         data['kpi'],
@@ -59,7 +55,7 @@ def update_data(uf, kpi, color, data):
     [Input('chart_info', 'data')])
 def update_map(data):
 
-    geojson = favoritos.geojson(data['uf'])
+    geojson = dab.geojson(data['uf'])
     df = pd.read_parquet(
         'data/ibge_data.parquet',
         columns = ['Código', 'Município', data['kpi']]
@@ -99,12 +95,3 @@ def update_map(data):
     })
 
     return fig
-
-
-
-if __name__ == '__main__':
-    app.run_server(
-        host = '0.0.0.0',
-        port = '1010',
-        debug = False
-    )
