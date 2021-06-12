@@ -33,24 +33,11 @@ radio = dbc.FormGroup([
 
 
 
-LOGO = 'https://raw.githubusercontent.com/GusFurtado/DadosAbertosBrasil/master/assets/logo.png'
-
-
-
 layout = dbc.Container(
     dbc.Row([
         dbc.Col(
-            html.Div([
-                html.A(
-                    html.Img(
-                        src = LOGO,
-                        style = {'maxWidth': '100%'},
-                        className = 'mt-1 mb-1'
-                    ),
-                    href = 'https://www.gustavofurtado.com/dab.html'
-                ),
-                dbc.Form(radio)
-            ],
+            html.Div(
+                dbc.Form(radio),
                 className = 'coluna shadow'
             ),
             width = 12,

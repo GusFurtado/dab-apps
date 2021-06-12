@@ -27,13 +27,11 @@ pc = PageCollection(pages=[
 
 
 
-LOGO = "https://raw.githubusercontent.com/GusFurtado/MyWebsite/master/assets/dab_nav_brand.png"
-
 navbar = dbc.Row([
     dbc.Col(
         html.A(
             html.Img(
-                src = LOGO,
+                src = config.LOGO,
                 height = 48
             ),
             href='http://gustavofurtado.com/dab.html'
@@ -75,9 +73,9 @@ app = DashProxy(
 )
 
 stuff = [html.Div(id=CONTENT_ID), dcc.Location(id=URL_ID)]
-#app.layout = html.Div(simple_menu(pc) + stuff)
 app.layout = html.Div([navbar] + stuff)
 app.title = config.TITLE
+
 
 
 pc.navigation(app)
