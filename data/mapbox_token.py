@@ -1,0 +1,1 @@
+TOKEN = 'pk.eyJ1IjoiZ3VzdGF2b2Z1cnRhZG8iLCJhIjoiY2s2NmlsYjkwMDFsaTNtbzhjdmZseG0ybCJ9.eMOZ1ywNoc7ui4uqcsJk8A'

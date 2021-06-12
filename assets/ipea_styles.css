@@ -1,0 +1,12 @@
+body {
+    background-color: cyan;
+    font-family: 'Montserrat';
+}
+
+
+.coluna {
+    background-color: white;
+    margin-top: 20px;
+    padding: 20px;
+    min-height: 560px;
+}
