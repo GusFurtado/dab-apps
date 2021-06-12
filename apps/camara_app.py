@@ -37,7 +37,7 @@ def update_dropdown_options(uf):
 
 # Carregar informações de um deputado
 @app.callback(
-    [Output('dep_foto', 'src'),
+    Output('dep_foto', 'src'),
     Output('dep_nome', 'children'),
     Output('dep_email', 'children'),
     Output('dep_telefone', 'children'),
@@ -47,13 +47,11 @@ def update_dropdown_options(uf):
     Output('dep_partido', 'children'),
     Output('partido_logo', 'src'),
     Output('plots', 'figure'),
-    Output('dashboard', 'style'),
-    Output('none_selected', 'style')],
-    [Input('dep_dropdown', 'value'),
-    Input('ano_input', 'value')],
-    prevent_initial_call = True)
+    Input('dep_dropdown', 'value'),
+    Input('ano_input', 'value'))
 def update_deputado(cod, ano):
-
+    if cod is None:
+        cod = 160541
     dep = camara.Deputado(cod)
     partido = PARTIDOS.index[PARTIDOS.sigla==dep.partido][0]
     charts = utils.Charts(deputado=dep, ano=ano)
@@ -73,7 +71,5 @@ def update_deputado(cod, ano):
         bandeira(dep.uf, tamanho=50),
         PARTIDOS.loc[partido, 'nome'],
         PARTIDOS.loc[partido, 'logo'],
-        charts.plots(),
-        None,
-        {'display': 'none'}
+        charts.plots()
     )

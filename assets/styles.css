@@ -6,7 +6,6 @@ body {
 
 
 .col_layout {
-    height: 540px;
     background-color: white;
     margin-top: 15px;
     padding: 15px;
@@ -27,30 +26,19 @@ body {
 }
 
 
-#dep_foto {
+#camara-dep_foto {
     width: 140px;
     border-radius: 10px;
 }
 
 
-#dep_uf {
+#camara-dep_uf {
     font-size: 18px;
 }
 
 
-#dep_partido {
+#camara-dep_partido {
     font-size: 18px;
-}
-
-
-#none_selected {
-    width: 100%;
-    height: 540px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: x-large;
-    font-weight: 700;
 }
 
 
