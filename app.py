@@ -17,23 +17,50 @@ pio.templates.default = "plotly_white"
 
 
 
-def simple_menu(page_collection):
-    children = []
-    pages = page_collection.pages
-    for i, page in enumerate(pages):
-        children.append(html.A(children=page.label, href=f'/{page.id}'))
-        if i < (len(pages) - 1):
-            children.append(html.Br())
-    return children
-
-
-
 pc = PageCollection(pages=[
     app_to_page(ibge_app.app, "ibge", "Mapa de Indicadores"),
     app_to_page(ipea_app.app, "ipea", "Indicadores Econômicos"),
     app_to_page(camara_app.app, "camara", "Painel de Deputados")
 ],
     default_page_id = 'ibge'
+)
+
+
+
+LOGO = "https://raw.githubusercontent.com/GusFurtado/MyWebsite/master/assets/dab_nav_brand.png"
+
+navbar = dbc.Row([
+    dbc.Col(
+        html.A(
+            html.Img(
+                src = LOGO,
+                height = 48
+            ),
+            href='http://gustavofurtado.com/dab.html'
+        ),
+        width = 'auto'
+    ),
+    dbc.Col(
+        dbc.Row([
+            dbc.Col(
+                html.A(
+                    children = page.label,
+                    href = f'/{page.id}',
+                    style = {'color': 'white'}
+                ),
+                width = 'auto'
+            ) for page in pc.pages
+        ]),
+        width = 'auto',
+        align = 'center'
+    )
+],
+    justify = 'between',
+    style = {
+        'background-color': '#002776',
+        'margin': 0,
+        'padding': 5
+    }
 )
 
 
@@ -47,10 +74,10 @@ app = DashProxy(
     suppress_callback_exceptions = True
 )
 
+stuff = [html.Div(id=CONTENT_ID), dcc.Location(id=URL_ID)]
+#app.layout = html.Div(simple_menu(pc) + stuff)
+app.layout = html.Div([navbar] + stuff)
 app.title = config.TITLE
-app.layout = html.Div(simple_menu(pc) \
-    + [html.Div(id=CONTENT_ID), dcc.Location(id=URL_ID)])
-
 
 
 pc.navigation(app)
