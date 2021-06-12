@@ -1,55 +1,10 @@
+from DadosAbertosBrasil import ipea
+
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from pandas import concat
+import pandas as pd
 
-
-
-UFS = {
-    'AC': 'Acre',
-    'AM': 'Amazonas',
-    'AL': 'Alagoas',
-    'AP': 'Amapá',
-    'BA': 'Bahia',
-    'CE': 'Ceará',
-    'DF': 'Distrito Federal',
-    'ES': 'Espirito Santo',
-    'GO': 'Goiás',
-    'MA': 'Maranhão',
-    'MG': 'Minas Gerais',
-    'MT': 'Mato Grosso',
-    'MS': 'Mato Grosso do Sul',
-    'PA': 'Pará',
-    'PB': 'Paraíba',
-    'PE': 'Pernambuco',
-    'PI': 'Piauí',
-    'PR': 'Paraná',
-    'RJ': 'Rio de Janeiro',
-    'RO': 'Rondônia',
-    'RN': 'Rio Grande do Norte',        
-    'RR': 'Roraima',
-    'RS': 'Rio Grande do Sul',
-    'SC': 'Santa Catarina',
-    'SE': 'Sergipe',
-    'SP': 'São Paulo',
-    'TO': 'Tocantins'
-}
-
-
-
-MESES = {
-    1: 'Janeiro',
-    2: 'Fevereiro',
-    3: 'Março',
-    4: 'Abril',
-    5: 'Maio',
-    6: 'Junho',
-    7: 'Julho',
-    8: 'Agosto',
-    9: 'Setembro',
-    10: 'Outubro',
-    11: 'Novembro',
-    12: 'Dezembro'
-}
+from . import lists
 
 
 
@@ -90,7 +45,7 @@ class Charts:
             b = not df.empty
 
         try:
-            self.despesas = concat(dfs, ignore_index=True)
+            self.despesas = pd.concat(dfs, ignore_index=True)
             self.total = f'{self.despesas.valorDocumento.sum():,.2f}'
 
         except:
@@ -142,7 +97,7 @@ class Charts:
         meses = self.despesas[['mes', 'valorDocumento']] \
             .groupby('mes').sum()
 
-        mes = meses.index.map(MESES)
+        mes = meses.index.map(lists.MESES)
         value_num = meses.valorDocumento
         value_text = value_num.apply(lambda x: f'{x:,.2f}')
         hover = [f'<b>Mês:</b> {i}<br><b>Valor:</b> {v}<extra></extra>' \
@@ -251,6 +206,55 @@ class Charts:
             ticksuffix = '   ',
             row = 1,
             col = 2
+        )
+
+        return fig
+
+
+
+class Serie:
+
+    def __init__(self, kpi:str):
+        self.serie = ipea.Serie(kpi)
+        self.kpi = kpi
+        self.nome = self.serie.nome
+        self.unidade = self.serie.unidade
+        self.valores = self.serie.valores[['VALDATA','VALVALOR']]
+        self.valores.columns = ['Ano', 'Valores']
+        self.valores.Ano = pd.to_datetime(self.valores.Ano, utc=True).dt.year
+        self.valores.Ano = self.valores.Ano[self.valores.Ano >= 1994]
+
+
+    def plot(self) -> go.Figure:
+        fig = go.Figure(
+            data = go.Bar(
+                x = self.valores.Ano,
+                y = self.valores.Valores,
+                name = self.nome,
+                marker = {
+                    'line': {
+                        'width': 0
+                    }
+                }
+            ),
+            layout = {
+                'title': {
+                    'text': f'<b>{self.nome}</b>',
+                    'font': {'family': 'Montserrat'}
+                },
+                'yaxis': {
+                    'title': self.unidade
+                },
+                'xaxis': {
+                    'type': 'category'
+                },
+                'margin': {
+                    'l': 5,
+                    'r': 5,
+                    't': 50,
+                    'b': 5
+                }
+            }
         )
 
         return fig

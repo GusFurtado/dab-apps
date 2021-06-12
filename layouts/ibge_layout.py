@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 
-import utils.ibge_utils as utils
+from utils import lists
 
 
 
@@ -14,10 +14,10 @@ dd_uf = dbc.DropdownMenu([
             html.Img(src=dab.bandeira(uf, 20)),
             className = 'mr-2'
         ),
-        html.Span(utils.UFS[uf]['Nome'])
+        html.Span(lists.UFS[uf]['Nome'])
     ],
         id = {'uf': uf}
-    ) for uf in utils.UFS
+    ) for uf in lists.UFS
 ],
     direction = 'left',
     nav = True,
@@ -32,7 +32,7 @@ dd_kpi = dbc.DropdownMenu([
     dbc.DropdownMenuItem(
         kpi,
         id = {'kpi': kpi}
-    ) for kpi in utils.KPIS
+    ) for kpi in lists.KPIS
 ],
     direction = 'left',
     nav = True,
@@ -47,7 +47,7 @@ dd_cor = dbc.DropdownMenu([
     dbc.DropdownMenuItem(
         color,
         id = {'colorscale': color}
-    ) for color in utils.COLORS
+    ) for color in lists.COLORS
 ],
     direction = 'left',
     nav = True,

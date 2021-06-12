@@ -2,7 +2,7 @@ import dash_html_components as html
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 
-import utils.camara_utils as utils
+from utils import utils, lists
 
 
 
@@ -12,9 +12,9 @@ inputs1 = dbc.Row([
             id = 'uf_dropdown',
             placeholder = 'Selecione uma UF...',
             options = [{
-                'label': utils.UFS[uf],
+                'label': lists.UFS[uf]['Nome'],
                 'value': uf
-            } for uf in utils.UFS]
+            } for uf in lists.UFS]
         ),
         width = 8,
         style = {'padding': 2}
@@ -146,7 +146,7 @@ column1 = dbc.Col(
         estado,
         partido
     ],
-        className = 'col_layout shadow'
+        className = 'coluna shadow'
     ),
     width = 12,
     lg = 5
@@ -169,7 +169,7 @@ column2 = dbc.Col(
                 )
             )
         ]),
-        className = 'col_layout shadow'
+        className = 'coluna shadow'
     ),
     width = 12,
     lg = 7

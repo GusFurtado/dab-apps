@@ -8,7 +8,7 @@ from dash_extensions.enrich import DashProxy
 from pandas import read_json
 
 import layouts.camara_layout as layout
-import utils.camara_utils as utils
+from utils import utils, lists
 
 
 
@@ -67,7 +67,7 @@ def update_deputado(cod, ano):
         dep.email,
         dep.gabinete['telefone'],
         nascimento,
-        utils.UFS[dep.uf],
+        lists.UFS[dep.uf]['Nome'],
         bandeira(dep.uf, tamanho=50),
         PARTIDOS.loc[partido, 'nome'],
         PARTIDOS.loc[partido, 'logo'],

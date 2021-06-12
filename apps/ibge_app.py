@@ -10,7 +10,7 @@ import plotly.express as px
 import pandas as pd
 
 import layouts.ibge_layout as layout
-import utils.ibge_utils as utils
+from utils import lists
 
 
 
@@ -38,9 +38,7 @@ app.layout = layout.layout
     prevent_initial_call = True)
 def update_data(uf, kpi, color, data):
     cc = dash.callback_context.triggered[0]['prop_id'].split('"')
-    print(cc)
     data[cc[1]] = cc[3][5:]
-    print(data)
     return (
         data['uf'],
         data['kpi'],
@@ -81,8 +79,8 @@ def update_map(data):
             'pitch': 0,
             'zoom': 5.5,
             'center': {
-                'lat': utils.UFS[data['uf']]['Latitude'],
-                'lon': utils.UFS[data['uf']]['Longitude']
+                'lat': lists.UFS[data['uf']]['Latitude'],
+                'lon': lists.UFS[data['uf']]['Longitude']
             }
         },
         'hovermode': 'closest',
