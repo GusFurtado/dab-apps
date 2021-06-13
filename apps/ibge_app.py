@@ -2,9 +2,8 @@ import DadosAbertosBrasil as dab
 
 import os
 
-import dash
 from dash_extensions.enrich import DashProxy
-from dash.dependencies import Input, Output, State, ALL
+from dash.dependencies import Input, Output, ALL
 import plotly.express as px
 
 import pandas as pd
@@ -27,36 +26,16 @@ app.layout = layout.layout
 
 
 @app.callback(
-    [Output('button_uf', 'label'),
-    Output('button_kpi', 'label'),
-    Output('button_color', 'label'),
-    Output('chart_info', 'data')],
-    [Input({'uf': ALL}, 'n_clicks'),
-    Input({'kpi': ALL}, 'n_clicks'),
-    Input({'colorscale': ALL}, 'n_clicks')],
-    [State('chart_info', 'data')],
-    prevent_initial_call = True)
-def update_data(uf, kpi, color, data):
-    cc = dash.callback_context.triggered[0]['prop_id'].split('"')
-    data[cc[1]] = cc[3][5:]
-    return (
-        data['uf'],
-        data['kpi'],
-        data['colorscale'],
-        data
-    )
-
-
-
-@app.callback(
     Output('map', 'figure'),
-    [Input('chart_info', 'data')])
-def update_map(data):
+    Input('dd_uf', 'value'),
+    Input('dd_kpi', 'value'),
+    Input('dd_cor', 'value'))
+def update_map(uf, kpi, color):
 
-    geojson = dab.geojson(data['uf'])
+    geojson = dab.geojson(uf)
     df = pd.read_parquet(
         'data/ibge_data.parquet',
-        columns = ['Código', 'Município', data['kpi']]
+        columns = ['Código', 'Município', kpi]
     )
 
     fig = px.choropleth_mapbox(
@@ -64,23 +43,30 @@ def update_map(data):
         geojson = geojson,
         featureidkey = 'properties.id',
         locations= 'Código',
-        color = data['kpi'],
+        color = kpi,
         mapbox_style = 'open-street-map',
-        color_continuous_scale = data['colorscale'],
+        color_continuous_scale = color,
         opacity = 0.5,
         hover_name = 'Município',
-        hover_data = {'Código': False, data['kpi']: True}
+        hover_data = {'Código': False, kpi: True}
     )
 
     fig.update_layout({
+        'coloraxis': {
+            'colorbar': {
+                'title': {
+                    'text': 'Escala'
+                }
+            }
+        },
         'mapbox': {
             'accesstoken': TOKEN,
             'bearing': 0,
             'pitch': 0,
             'zoom': 5.5,
             'center': {
-                'lat': lists.UFS[data['uf']]['Latitude'],
-                'lon': lists.UFS[data['uf']]['Longitude']
+                'lat': lists.UFS[uf]['Latitude'],
+                'lon': lists.UFS[uf]['Longitude']
             }
         },
         'hovermode': 'closest',

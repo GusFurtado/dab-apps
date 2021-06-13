@@ -18,10 +18,8 @@ INDICADORES = [
 
 radio = dbc.FormGroup([
     dbc.Label(
-        html.B(
-            'Indicador',
-            className = 'mt-2 mb-1'
-        ),
+        'Indicador',
+        className = 'mt-2 mb-1 bold_label',
         html_for = 'kpi_radio'
     ),
     dbc.RadioItems(

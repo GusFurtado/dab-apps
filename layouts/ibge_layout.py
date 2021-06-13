@@ -1,5 +1,3 @@
-import DadosAbertosBrasil as dab
-
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
@@ -8,86 +6,86 @@ from utils import lists
 
 
 
-dd_uf = dbc.DropdownMenu([
-    dbc.DropdownMenuItem([
-        html.Span(
-            html.Img(src=dab.bandeira(uf, 20)),
-            className = 'mr-2'
-        ),
-        html.Span(lists.UFS[uf]['Nome'])
-    ],
-        id = {'uf': uf}
-    ) for uf in lists.UFS
-],
-    direction = 'left',
-    nav = True,
-    in_navbar = True,
-    label = 'UF',
-    id = 'button_uf'
-)
-
-
-
-dd_kpi = dbc.DropdownMenu([
-    dbc.DropdownMenuItem(
-        kpi,
-        id = {'kpi': kpi}
-    ) for kpi in lists.KPIS
-],
-    direction = 'left',
-    nav = True,
-    in_navbar = True,
-    label = 'Indicador',
-    id = 'button_kpi'
-)
-
-
-
-dd_cor = dbc.DropdownMenu([
-    dbc.DropdownMenuItem(
-        color,
-        id = {'colorscale': color}
-    ) for color in lists.COLORS
-],
-    direction = 'left',
-    nav = True,
-    in_navbar = True,
-    label = 'Paleta de Cores',
-    id = 'button_color'
-)
-
-
-
-navbar = dbc.NavbarSimple([
-        dd_uf,
-        dd_kpi,
-        dd_cor,
-    ],
-    brand = 'Dados Abertos Brasil',
-    brand_style = {
-        'font-weight': 'bold',
-        'color': '#FEDF00'
-    },
-    brand_href = "https://www.gustavofurtado.com/dab.html",
-    color = "primary",
-    dark = True,
-)
-
-
-
-layout = html.Div([
-    dcc.Store(
-        id = 'chart_info',
-        data = {
-            'uf': 'AC',
-            'colorscale': 'plasma',
-            'kpi': 'Taxa de Alfabetização'
-        }
+dd_uf = dbc.FormGroup([
+    dbc.Label(
+        'Unidade da Federação',
+        html_for = 'dd_uf',
+        className = 'bold_label'
     ),
-    navbar,
+    dcc.Dropdown(
+        id = 'dd_uf',
+        value = 'AC',
+        clearable = False,
+        options = [
+            {'label': lists.UFS[uf]['Nome'], 'value': uf} for uf in lists.UFS
+        ]
+    )
+])
+
+dd_cor = dbc.FormGroup([
+    dbc.Label(
+        'Escala de Cores',
+        html_for = 'dd_cor',
+        className = 'bold_label'
+    ),
+        dcc.Dropdown(
+        id = 'dd_cor',
+        value = 'plasma',
+        clearable = False,
+        options = [
+            {'label': color, 'value': color} for color in lists.COLORS
+        ]
+    )
+])
+
+dd_kpi = dbc.FormGroup([
+    dbc.Label(
+        'Indicador',
+        html_for = 'dd_kpi',
+        className = 'bold_label'
+    ),
+        dcc.Dropdown(
+        id = 'dd_kpi',
+        value = 'Taxa de Alfabetização',
+        clearable = False,
+        options = [
+            {'label': kpi, 'value': kpi} for kpi in lists.KPIS
+        ]
+    )
+])
+
+
+
+column1 = html.Div([
+    dd_uf,
+    html.Hr(),
+    dd_kpi,
+    html.Hr(),
+    dd_cor
+],
+    className = 'coluna shadow'
+)
+
+column2 = html.Div(
     dcc.Loading(
         dcc.Graph(id='map')
-    )
+    ),
+    className = 'coluna shadow'
+)
+
+
+
+layout = dbc.Container([
+    dbc.Row([
+        dbc.Col(
+            column1,
+            width = 4
+        ),
+        dbc.Col(
+            column2,
+            width = 8
+        )
+    ])
 ],
-    id = 'background'
+    fluid = True
 )

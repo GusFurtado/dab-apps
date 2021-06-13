@@ -47,3 +47,8 @@ body {
     font-weight: 800;
     color: purple;
 }
+
+
+.bold_label {
+    font-weight: 800;
+}
