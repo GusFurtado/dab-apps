@@ -1,0 +1,12 @@
+DadosAbertosBrasil
+
+dash
+dash_bootstrap_components
+dash_core_components
+dash_extensions
+dash_html_components
+plotly
+
+gunicorn
+pandas
+pyarrow

@@ -79,11 +79,13 @@ layout = dbc.Container([
     dbc.Row([
         dbc.Col(
             column1,
-            width = 4
+            width = 12,
+            lg = 4
         ),
         dbc.Col(
             column2,
-            width = 8
+            width = 12,
+            lg = 8
         )
     ])
 ],
