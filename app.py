@@ -75,7 +75,7 @@ app = DashProxy(
 stuff = [html.Div(id=CONTENT_ID), dcc.Location(id=URL_ID)]
 app.layout = html.Div([navbar] + stuff)
 app.title = config.TITLE
-
+server = app.server
 
 
 pc.navigation(app)
