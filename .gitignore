@@ -128,6 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-
-Rascunho.ipynb
+# Project files
 mapbox_token.py

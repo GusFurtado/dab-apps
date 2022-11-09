@@ -2,17 +2,30 @@ import DadosAbertosBrasil as dab
 
 import os
 
-from dash_extensions.enrich import DashProxy
-from dash.dependencies import Input, Output, ALL
+from dash import (
+    Input,
+    Output,
+    callback,
+    register_page
+)
 import plotly.express as px
 
 import pandas as pd
 
-import layouts.ibge_layout as layout
+from .ibge_layout import IbgeLayout
 from utils import lists
 
 
 
+register_page(
+    __name__,
+    path = '/ibge',
+    title = 'Indicadores Municipais'
+)
+
+
+
+layout = IbgeLayout()
 TOKEN = os.environ.get('TOKEN')
 if TOKEN is None:
     import mapbox_token
@@ -20,12 +33,7 @@ if TOKEN is None:
 
 
 
-app = DashProxy(name=__name__)
-app.layout = layout.layout
-
-
-
-@app.callback(
+@callback(
     Output('map', 'figure'),
     Input('dd_uf', 'value'),
     Input('dd_kpi', 'value'),
