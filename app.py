@@ -6,18 +6,18 @@ from components import Dashboard, Drawer, DrawerSingleItem, DrawerFooter, Navbar
 
 
 # Create server with secret key
-server = Flask(__name__)
-server.secret_key = "SECRET_KEY"
+app = Flask(__name__)
+app.secret_key = "SECRET_KEY"
 pio.templates.default = "plotly_white"
 
 
 # Instanciate Dash app
-app = Dash(
+dash_app = Dash(
     name=__name__,
-    server=server,
-    title="My Web App",
+    server=app,
+    title="Dados Abertos Brasil",
     use_pages=True,
-    update_title="Updating...",
+    update_title="Buscando dados...",
 )
 
 
@@ -40,7 +40,7 @@ nav_links = [
 
 
 # Create Dashboard Layout
-app.layout = Dashboard(
+dash_app.layout = Dashboard(
     children=page_container,
     id="dashboard",
     navbar=Navbar(title="Dados Abertos Brasil", id="dashboard-navbar"),
@@ -52,7 +52,7 @@ app.layout = Dashboard(
 )
 
 
-@app.callback(
+@dash_app.callback(
     Output("dashboard-navbar--title", "children"),
     Input("dashboard--location", "pathname"),
 )
@@ -80,6 +80,6 @@ def init_app(path):
         return "Dados Abertos Brasil"
 
 
-# Run app
+# Run app locally
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=1000)
+    dash_app.run(host="0.0.0.0", port=1000)
