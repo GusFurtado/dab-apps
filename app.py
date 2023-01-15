@@ -1,20 +1,12 @@
 from dash import Dash, Input, Output, page_container
-from flask import Flask
 import plotly.io as pio
 
 from components import Dashboard, Drawer, DrawerSingleItem, DrawerFooter, Navbar
 
 
-# Create server with secret key
-app = Flask(__name__)
-app.secret_key = "SECRET_KEY"
-pio.templates.default = "plotly_white"
-
-
 # Instanciate Dash app
 dash_app = Dash(
     name=__name__,
-    server=app,
     title="Dados Abertos Brasil",
     use_pages=True,
     update_title="Buscando dados...",
@@ -81,5 +73,9 @@ def init_app(path):
 
 
 # Run app locally
+app = dash_app.server
+app.secret_key = "SECRET_KEY"
+pio.templates.default = "plotly_white"
+
 if __name__ == "__main__":
     dash_app.run(host="0.0.0.0", port=1000)
