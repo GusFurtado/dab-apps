@@ -5,4 +5,3 @@ dash-iconify
 gunicorn
 pandas[parquet]
 plotly>=5.4.0
-Werkzeug==2.0.0
