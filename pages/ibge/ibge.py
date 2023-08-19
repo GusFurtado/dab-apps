@@ -20,10 +20,7 @@ register_page(
 layout = IbgeLayout()
 TOKEN = os.environ.get("TOKEN")
 if TOKEN is None:
-    t1 = "pk.eyJ1IjoiZ3VzdGF2b2Z1cnRhZG8iLC"
-    t2 = "JhIjoiY2s2NmlsYjkwMDFsaTNtbzhjdmZ"
-    t3 = "seG0ybCJ9.eMOZ1ywNoc7ui4uqcsJk8A"
-    TOKEN = t1 + t2 + t3
+    from mapbox_token import TOKEN
 
 
 @callback(
@@ -33,7 +30,6 @@ if TOKEN is None:
     Input("dd_cor", "value"),
 )
 def update_map(uf, kpi, color):
-
     geojson = dab.geojson(uf)
     df = pd.read_parquet("data/ibge_data.parquet", columns=["Código", "Município", kpi])
 
