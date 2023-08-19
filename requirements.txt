@@ -3,8 +3,6 @@ dash>=2.5.1
 dash-bootstrap-components>=1.0.2
 dash-iconify
 gunicorn
-numpy
-pandas
+pandas[parquet]
 plotly>=5.4.0
-pyarrow
 Werkzeug==2.0.0
