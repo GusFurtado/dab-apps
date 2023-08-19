@@ -2,7 +2,7 @@
 
 Este é um repositório com exemplos de aplicações que são possível com pacote **[Dados Abertos Brasil](https://github.com/GusFurtado/DadosAbertosBrasil)**.
 
-Estas aplicações foram construída com **[Dash by Plotly](https://github.com/plotly/dash)** e publicados na **[Azure](https://dab-apps.azurewebsites.net/ibge)**.
+Estas aplicações foram construída com **[Dash by Plotly](https://github.com/plotly/dash)** e publicados no **[Render](https://dab-apps.onrender.com/ibge)**.
 
 
 
