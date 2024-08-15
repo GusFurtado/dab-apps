@@ -19,8 +19,6 @@ register_page(
 
 layout = IbgeLayout()
 TOKEN = os.environ.get("TOKEN")
-if TOKEN is None:
-    from mapbox_token import TOKEN
 
 
 @callback(
